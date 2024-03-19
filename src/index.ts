@@ -2,6 +2,7 @@ import express, {Request, Response} from 'express'
 import { InitRoute } from './route'
 import { log } from './helper/logger'
 import { Database } from './database/mysql'
+
 const app = express()
 const port = process.env.PORT || 8011
 

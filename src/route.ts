@@ -36,7 +36,6 @@ export function InitRoute(app: any) {
   })
   
   const repo = repos(conn)
-
   const service = services(repo)
   const handler = handlers(service)
 
