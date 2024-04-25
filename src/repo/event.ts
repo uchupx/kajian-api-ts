@@ -1,10 +1,19 @@
+import { Database } from "../database/mysql";
+import { EventModel } from "./models/event";
 import { Repo } from "./repo";
 
 export class EventRepo extends Repo {
-  static readonly tableName = "events"
+  constructor(database: Database) {
+    super(database);
+    // define table name
+    this.tableName = "events"
+  }
 
-  static readonly insertQ = `INSERT INTO ${this.tableName} ({fields}) VALUES ? ;`
-  static readonly selectQ = `SELECT {fields} FROM ${this.tableName} {where};`
-  static readonly updateQ = `UPDATE ${this.tableName} SET {fields} WHERE {where};`
-  static readonly hardDelQ = `DELETE ${this.tableName} WHERE {where};`
+  public find(): Array<EventModel> {
+    let q = this.selectQ()
+
+    console.log(q);
+    
+    return [];
+  }
 }

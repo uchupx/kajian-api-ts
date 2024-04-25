@@ -11,4 +11,8 @@ export class EventService implements Service {
   public createEvent(): any {
     return 
   }
+
+  public findEvent(): any {
+    this.eventRepo.find()
+  }
 }
