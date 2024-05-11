@@ -1,8 +1,8 @@
 import mysql, { ConnectionOptions, Connection } from 'mysql2';
-import {log} from '../helper/logger'
+import { log } from '../helper/logger'
 
 export class Database {
-  public connection : Connection
+  public connection: Connection
 
   constructor(conf: ConnectionOptions) {
     this.connection = mysql.createConnection(conf);
@@ -38,15 +38,17 @@ export class Database {
     log.info("test done")
   }
 
-  public execute(query: string, args?: Array<any>): any {
-    this.connection.prepare(query, (err, stmt) => {
-      if (err) {
-        log.error("failed to prepare statement with query : " + query)
-        return false
-      }
+  public execute(query: string, args?: Array<any>): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.connection.execute(query, args, (err, result) => {
+        if (err) {
+          log.error("query failed: " + err.message)
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
     })
-
-    return false
   }
 }
 

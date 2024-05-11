@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express'
+import express, { Request, Response } from 'express'
 import { InitRoute } from './route'
 import { log } from './helper/logger'
 import { Database } from './database/mysql'

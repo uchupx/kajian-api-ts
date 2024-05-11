@@ -9,10 +9,10 @@ export class EventService implements Service {
   }
 
   public createEvent(): any {
-    return 
+    return
   }
 
-  public findEvent(): any {
-    this.eventRepo.find()
+  public async findEvent(): Promise<any> {
+    return await this.eventRepo.find()
   }
 }

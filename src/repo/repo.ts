@@ -1,9 +1,12 @@
 import { Database } from "../database/mysql";
 
 export class Repo {
-  private conn?: Database;
+  protected conn?: Database;
   protected tableName: string;
-  
+
+  protected static fieldsEnums = '{fields}';
+  protected static whereEnums = '{where}';
+
   constructor(database: Database) {
     console.log(database.test())
     this.conn = database;

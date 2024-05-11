@@ -7,7 +7,7 @@ import { EventService } from "../services/event"
 
 export class EventHandler implements Handler {
   static readonly path = "/events"
-  
+
   private eventSvc: EventService
 
   constructor(eventSvc: EventService) {
@@ -19,7 +19,9 @@ export class EventHandler implements Handler {
       {
         method: RouteMethod.Post,
         path: EventHandler.path,
-        func: this.create 
+        func: (req: Request, res: Response) => {
+          return this.create(req, res)
+        }
       },
       {
         method: RouteMethod.Get,
@@ -31,12 +33,15 @@ export class EventHandler implements Handler {
     ] as Array<Route>
   }
 
-  create(req: Request, res: Response):any {
+  /**
+   * test doc
+   */
+  public create(req: Request, res: Response): any {
     res.status(HttpStatusCode.CREATED).json(successResponse("created"))
   }
 
-  public find(req: Request, res: Response): any {
-    const r = this.eventSvc.findEvent()
-    res.status(HttpStatusCode.CREATED).json(successResponse("created"))
+  public async find(req: Request, res: Response) {
+    const r = await this.eventSvc.findEvent()
+    res.status(HttpStatusCode.OK).json(successResponse(r))
   }
 }
