@@ -7,6 +7,7 @@ const app = express()
 const port = process.env.PORT || 8011
 
 
+app.use(express.json())
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello ini berhasil')
 })

@@ -1,9 +1,10 @@
 import { Route, RouteMethod } from "../route"
-import { Handler } from "./interface"
+import { Handler, BindRequest } from "./interface"
 import { Request, Response } from "express"
 import HttpStatusCode from "../helper/enums/http"
 import { successResponse } from "../helper/reqres"
 import { EventService } from "../services/event"
+import { EventPayload } from "../types/request/event"
 
 export class EventHandler implements Handler {
   static readonly path = "/events"
@@ -33,11 +34,10 @@ export class EventHandler implements Handler {
     ] as Array<Route>
   }
 
-  /**
-   * test doc
-   */
   public create(req: Request, res: Response): any {
-    res.status(HttpStatusCode.CREATED).json(successResponse("created"))
+    const payload = BindRequest<EventPayload>(req)
+
+    res.status(HttpStatusCode.CREATED).json(successResponse(payload))
   }
 
   public async find(req: Request, res: Response) {

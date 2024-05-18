@@ -1,6 +1,6 @@
 import { EventRepo } from "../repo/event";
 import { Service } from "./service";
-
+import { EventPayload } from "../types/request/event";
 export class EventService implements Service {
   private eventRepo: EventRepo
 
@@ -8,8 +8,8 @@ export class EventService implements Service {
     this.eventRepo = eventRepo
   }
 
-  public createEvent(): any {
-    return
+  public createEvent(payload: EventPayload): any {
+    return payload
   }
 
   public async findEvent(): Promise<any> {
