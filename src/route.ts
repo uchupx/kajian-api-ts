@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import HttpStatusCode from "./helper/enums/http"
 import { successResponse } from "./helper/reqres"
+import { Config } from "./helper/app"
 import { log } from "./helper/logger"
 import { repos } from "./repo"
 import { services } from "./services"
@@ -9,7 +10,7 @@ import { Database } from "./database/mysql"
 
 export enum RouteMethod {
   Get = 'get',
-  Post= 'post',
+  Post = 'post',
   Put = 'put'
 }
 
@@ -19,7 +20,7 @@ export type Route = {
   func(req: Request, res: Response): any
 }
 
-export function InitRoute(app: any) {
+export function InitRoute(app: any, config: Config) {
   const routes = [{
     method: RouteMethod.Get,
     path: "/ping",
@@ -27,14 +28,15 @@ export function InitRoute(app: any) {
       res.status(HttpStatusCode.OK).send(successResponse("pong !!!"))
     }
   }] as Array<Route>
-  
+
   const conn = new Database({
-    user: 'root',
-    host: 'localhost',
-    database: 'kajian',
-    port: 3306
+    user: config.database.username,
+    host: config.database.host,
+    database: config.database.database,
+    port: config.database.port,
+    password: config.database.password,
   })
-  
+
   const repo = repos(conn)
   const service = services(repo)
   const handler = handlers(service)

@@ -1,4 +1,5 @@
 import { Database } from "../database/mysql";
+import { uuidv7 } from "uuidv7";
 
 export class Repo {
   protected conn?: Database;
@@ -6,14 +7,19 @@ export class Repo {
 
   protected static fieldsEnums = '{fields}';
   protected static whereEnums = '{where}';
+  protected static valuesEnums = '{values}';
 
   constructor(database: Database) {
     console.log(database.test())
     this.conn = database;
   }
 
+  protected id(): string {
+    return uuidv7();
+  }
+
   protected insertQ(): string {
-    return `INSERT INTO ${this.tableName} ({fields}) VALUES ?`;
+    return `INSERT INTO ${this.tableName} ({fields}) VALUES {values}`;
   }
 
   protected updateQ(): string {

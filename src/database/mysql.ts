@@ -3,9 +3,12 @@ import { log } from '../helper/logger'
 
 export class Database {
   public connection: Connection
+  private _debug: boolean = false
 
   constructor(conf: ConnectionOptions) {
     this.connection = mysql.createConnection(conf);
+
+    this._debug = conf.debug ? conf.debug : false
 
     this.connection.ping(err => {
       if (err) {
@@ -40,6 +43,14 @@ export class Database {
 
   public execute(query: string, args?: Array<any>): Promise<any> {
     return new Promise((resolve, reject) => {
+      if (this._debug) {
+        log.info("query: " + query)
+
+        if (args) {
+          log.info("args: " + args)
+        }
+      }
+
       this.connection.execute(query, args, (err, result) => {
         if (err) {
           log.error("query failed: " + err.message)
@@ -49,6 +60,22 @@ export class Database {
         }
       })
     })
+  }
+
+  public begin(callback: Function): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.connection.beginTransaction(err => {
+        if (err) {
+          log.error("begin transaction failed: " + err.message)
+          reject(err)
+        } else {
+          callback(resolve, reject)
+        }
+      })
+    })
+  }
+
+  public slowQuery(query: string, args?: Array<any>) {
   }
 }
 

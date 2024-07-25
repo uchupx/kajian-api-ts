@@ -8,3 +8,7 @@ export interface Handler {
 export function BindRequest<T>(req: Request): T {
   return req.body as T
 }
+
+export function BindQuery<T>(req: Request): T {
+  return req.query as T
+}

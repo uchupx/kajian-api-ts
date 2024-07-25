@@ -1,5 +1,5 @@
 import { Model } from "./model"
-
+import { EVENT_STATUS } from "../../types/enums/event"
 export class EventModel implements Model {
   public id?: string
   public speaker_id?: string
@@ -17,6 +17,7 @@ export class EventModel implements Model {
   public created_at?: Date
   public updated_at?: Date
   public deleted_at?: Date
+  public status: string
 
   constructor(data: any) {
     this.id = data.id ? data.id : null
@@ -35,6 +36,7 @@ export class EventModel implements Model {
     this.created_at = data.created_at ? data.created_at : null
     this.updated_at = data.updated_at ? data.updated_at : null
     this.deleted_at = data.deleted_at ? data.deleted_at : null
+    this.status = data.speaker_id && data.start_event ? data.deleted_at : EVENT_STATUS.DRAFT
   }
 
   // use toJSON to force the model to return only the fields that we want
