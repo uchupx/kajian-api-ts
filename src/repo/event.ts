@@ -14,8 +14,7 @@ export class EventRepo extends Repo {
     q = q.replace(Repo.fieldsEnums, "id, speaker_id, name, description, detail_address, date_event, start_event, end_event, created_at, status")
     q = q.replace(Repo.valuesEnums, "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
 
-    let args = [
-      this.id(), event.speaker_id, event.name, event.description, event.detail_address, event.date_event, event.start_event, event.end_event, event.created_at, event.status]
+    let args = [this.id(), event.speaker_id, event.name, event.description, event.detail_address, event.date_event, event.start_event, event.end_event, event.created_at, event.status]
 
     await this.conn?.execute(q, args).then((rows) => {
       return event;
