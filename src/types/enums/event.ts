@@ -1,7 +1,8 @@
 export const EVENT_STATUS = {
   DRAFT: 1,
-  PUBLISHED: 2,
-  LIVE: 3,
-  FINISHED: 4,
-  CANCELLED: 5,
+  ON_REVIEW: 2,
+  PUBLISHED: 3,
+  LIVE: 4,
+  FINISHED: 5,
+  CANCELLED: 6,
 }

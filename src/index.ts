@@ -10,11 +10,9 @@ const port = config.app.port || 8011
 
 
 app.use(express.json())
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello ini berhasil')
-})
 
-
+//
+log.info(`Server env: ${config.app.env}`)
 InitRoute(app, config)
 
 app.listen(port, () => {

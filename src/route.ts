@@ -21,13 +21,22 @@ export type Route = {
 }
 
 export function InitRoute(app: any, config: Config) {
-  const routes = [{
-    method: RouteMethod.Get,
-    path: "/ping",
-    func: (req: Request, res: Response): any => {
-      res.status(HttpStatusCode.OK).send(successResponse("pong !!!"))
+  const routes = [
+    {
+      method: RouteMethod.Get,
+      path: "/version",
+      func: (req: Request, res: Response): any => {
+        res.status(HttpStatusCode.OK).send(config.app.version)
+      }
+    },
+    {
+      method: RouteMethod.Get,
+      path: "/ping",
+      func: (req: Request, res: Response): any => {
+        res.status(HttpStatusCode.OK).send(successResponse("pong !!!"))
+      }
     }
-  }] as Array<Route>
+  ] as Array<Route>
 
   const conn = new Database({
     user: config.database.username,
@@ -48,7 +57,7 @@ export function InitRoute(app: any, config: Config) {
 
   routes.forEach(r => {
     app[r.method](r.path, r.func)
-    log.info(`Route : ${r.method.toUpperCase()}: ${r.path} -> ${r.func.name}`)
+    log.info(`Route : ${r.method.toUpperCase()}: ${r.path} -> ${r.func.name.replace('bound ', '')}`)
   })
 }
 

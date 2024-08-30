@@ -22,16 +22,17 @@ export class EventHandler implements Handler {
       {
         method: RouteMethod.Post,
         path: EventHandler.path,
-        func: (req: Request, res: Response) => {
-          return this.create(req, res)
-        }
+        func: this.create.bind(this),
       },
       {
         method: RouteMethod.Get,
         path: EventHandler.path,
-        func: (req: Request, res: Response) => {
-          return this.find(req, res)
-        }
+        func: this.find.bind(this),
+      },
+      {
+        method: RouteMethod.Get,
+        path: EventHandler.path + "/:id",
+        func: this.findById.bind(this),
       }
     ] as Array<Route>
   }
@@ -50,11 +51,42 @@ export class EventHandler implements Handler {
     }
   }
 
+  public update(req: Request, res: Response): any {
+    const [err, payload] = validate<EventPayload>(EventSchema, req.body)
+    const { id } = req.params
+
+    if (err) {
+      return res.status(HttpStatusCode.BAD_REQUEST).json(err)
+    }
+
+    try {
+      const r = this.eventSvc.updateEvent(id, payload)
+
+      res.status(HttpStatusCode.OK).json(successResponse(r))
+    } catch (e) {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(e)
+    }
+  }
+
   public async find(req: Request, res: Response) {
     const query = BindQuery<DefQuery>(req)
 
     try {
       const r = await this.eventSvc.findEvent(query)
+      res.status(HttpStatusCode.OK).json(successResponse(r))
+    } catch (e) {
+      res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(e)
+    }
+  }
+
+  public async findById(req: Request, res: Response) {
+    const { id } = req.params
+
+    try {
+      const r = await this.eventSvc.findByIdEvent(id)
+      if (!r) {
+        return res.status(HttpStatusCode.NOT_FOUND).json({ message: "event not found" })
+      }
       res.status(HttpStatusCode.OK).json(successResponse(r))
     } catch (e) {
       res.status(HttpStatusCode.INTERNAL_SERVER_ERROR).json(e)

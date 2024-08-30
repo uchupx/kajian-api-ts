@@ -10,7 +10,7 @@ export class Repo {
   protected static valuesEnums = '{values}';
 
   constructor(database: Database) {
-    console.log(database.test())
+    //console.log(database.test())
     this.conn = database;
   }
 
