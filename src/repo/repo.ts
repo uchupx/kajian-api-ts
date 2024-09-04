@@ -1,7 +1,10 @@
 import { Database } from "../database/mysql";
 import { uuidv7 } from "uuidv7";
 
-export class Repo {
+export interface RepoInterface {
+}
+
+export class Repo implements RepoInterface {
   protected conn?: Database;
   protected tableName: string;
 
@@ -11,6 +14,7 @@ export class Repo {
 
   constructor(database: Database) {
     //console.log(database.test())
+    this.tableName = '';
     this.conn = database;
   }
 

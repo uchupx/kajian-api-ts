@@ -1,5 +1,5 @@
 import { Database } from "../database/mysql";
-import { SpeakerModel } from "./models/speakers";
+import { SpeakerModel } from "./models/speaker";
 import { Repo } from "./repo";
 
 export class SpeakerRepo extends Repo {

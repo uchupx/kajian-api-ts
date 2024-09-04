@@ -1,4 +1,5 @@
 import { EventRepo } from "../repo/event";
+import { RepoInterface } from "../repo/repo";
 import { Service } from "./service";
 import { EventPayload } from "../types/request/event";
 import { DefQuery } from "../types/request";
@@ -6,8 +7,8 @@ import { EventModel } from "../repo/models/event";
 export class EventService implements Service {
   private eventRepo: EventRepo
 
-  constructor(eventRepo: EventRepo) {
-    this.eventRepo = eventRepo
+  constructor(eventRepo: EventRepo | RepoInterface) {
+    this.eventRepo = eventRepo as EventRepo
   }
 
   public async createEvent(payload: EventPayload): Promise<any> {
