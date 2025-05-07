@@ -11,6 +11,9 @@ export type Config = {
     port: number;
     database: string;
   },
+  redis: {
+    url: string;
+  },
   app: {
     port: number;
     env: 'development' | 'production';
@@ -24,12 +27,13 @@ export type Config = {
 const projectPath: string = __dirname + '/../../'
 
 function getConfig(): Config {
-  let fs = require('fs')
-
+  const fs = require('fs')
   const version = fs.readFileSync(projectPath + '/version', 'utf8')
+
   let conf = JSON.parse(fs.readFileSync(projectPath + '/.env.json', 'utf8')) as Config
 
   conf.app.version = version.replace('\n', '')
+
   return conf;
 }
 

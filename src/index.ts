@@ -11,7 +11,6 @@ const port = config.app.port || 8011
 
 app.use(express.json())
 
-//
 log.info(`Server env: ${config.app.env}`)
 InitRoute(app, config)
 

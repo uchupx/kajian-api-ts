@@ -7,6 +7,8 @@ import { repos } from "./repo"
 import { services } from "./services"
 import { handlers } from "./handlers"
 import { Database } from "./database/mysql"
+import Redis from "./database/redis"
+import middlewares from "./middlewares"
 
 export enum RouteMethod {
   Get = 'get',
@@ -17,6 +19,7 @@ export enum RouteMethod {
 export type Route = {
   method: RouteMethod,
   path: string,
+  needAuth?: boolean,
   func(req: Request, res: Response): any
 }
 
@@ -32,6 +35,7 @@ export function InitRoute(app: any, config: Config) {
     {
       method: RouteMethod.Get,
       path: "/ping",
+      needAuth: true,
       func: (req: Request, res: Response): any => {
         res.status(HttpStatusCode.OK).send(successResponse("pong !!!"))
       }
@@ -46,6 +50,8 @@ export function InitRoute(app: any, config: Config) {
     password: config.database.password,
   })
 
+  const connRedis = new Redis({url: config.redis.url})
+
   const repo = repos(conn)
   const service = services(repo)
   const handler = handlers(service)
@@ -56,7 +62,14 @@ export function InitRoute(app: any, config: Config) {
   log.info(`Initialize route`)
 
   routes.forEach(r => {
-    app[r.method](r.path, r.func)
+    r.needAuth = r.needAuth || false
+
+    if (r.needAuth) {
+      app[r.method](r.path, middlewares.authorization, r.func)
+    } else {
+      app[r.method](r.path, r.func)
+    }
+
     log.info(`Route : ${r.method.toUpperCase()}: ${r.path} -> ${r.func.name.replace('bound ', '')}`)
   })
 }
